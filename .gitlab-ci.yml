@@ -1,0 +1,32 @@
+stages:
+  - lint
+  - test
+
+default:
+  image: mcr.microsoft.com/playwright/python:v1.49.1-jammy
+
+lint:
+  stage: lint
+  script:
+    - pip install flake8
+    - flake8 .
+
+api-tests:
+  stage: test
+  script:
+    - pip install -r requirements.txt
+    - pytest tests/api -m api -v
+  artifacts:
+    when: always
+    paths:
+      - allure-results/
+
+ui-tests:
+  stage: test
+  script:
+    - pip install -r requirements.txt
+    - pytest tests/ui -m ui -v
+  artifacts:
+    when: always
+    paths:
+      - allure-results/
